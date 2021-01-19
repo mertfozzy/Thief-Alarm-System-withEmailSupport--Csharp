@@ -20,9 +20,14 @@ namespace PIR
         {
             InitializeComponent();
         }
+        MailMessage eposta = new MailMessage();
 
+        public int i { get; private set; }
         private void Form1_Load(object sender, EventArgs e)
         {
+            string mailkaynak = textBox1.Text;
+            string mailsifre = textBox2.Text;
+            string gonderilecek = textBox3.Text;
             string[] ports = SerialPort.GetPortNames();  //Seri portları diziye ekleme
             foreach (string port in ports)
                 comboBox1.Items.Add(port);               //Seri portları comboBox1'e ekleme
@@ -34,13 +39,13 @@ namespace PIR
             string data = serialPort1.ReadLine();
             panel1.BackColor = Color.LightGreen;       //Panel rengini LightGreen yap
             SmtpClient SmtpServer = new SmtpClient();
-            SmtpServer.Credentials = new NetworkCredential("gönderen mail", "şifre");  //Buraya kendi gmail adresinizi ve şifrenizi girin
+            SmtpServer.Credentials = new NetworkCredential(textBox1.Text, textBox2.Text);  //Buraya kendi gmail adresinizi ve şifrenizi girin
             SmtpServer.Port = 587;                              //Port Numarası
             SmtpServer.Host = "smtp.live.com";                 //Sunucu adresi
             SmtpServer.EnableSsl = true;                        //SSL ayarı
             MailMessage mail = new MailMessage();
-            mail.To.Add("mertfozzy@gmail.com");            //Gönderilecek adres
-            mail.From = new MailAddress("mertfozzy@outlook.com", "Arduino - PIR Sensörü");  //Mailin gönderildiği adres ve isim tanımlaması
+            mail.To.Add(textBox3.Text);            //Gönderilecek adres
+            mail.From = new MailAddress(textBox1.Text, "Arduino - PIR Sensörü");  //Mailin gönderildiği adres ve isim tanımlaması
             mail.Subject = "Hareket Algılandı!";     //Mail konusu
             mail.Body = "Ortamda hareket algılandı!\nLütfen güvenliğinizi kontrol ediniz.";//Mailin body kısmındaki metin
             SmtpServer.Send(mail);  //Maili gönder
@@ -96,6 +101,30 @@ namespace PIR
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                //karakteri göster.
+                textBox2.PasswordChar = '\0';
+            }
+            //değilse karakterlerin yerine * koy.
+            else
+            {
+                textBox2.PasswordChar = '*';
+            }
         }
     }
 }
